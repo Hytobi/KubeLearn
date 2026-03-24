@@ -7,14 +7,16 @@ import LevelNav from './components/LevelNav';
 import LevelQuiz from './components/LevelQuiz';
 import StageQuiz from './components/StageQuiz';
 import QuizSection from './components/QuizSection';
+import YamlSection from './components/YamlSection';
+import YamlLibrary from './components/YamlLibrary';
 import { levels } from './mockData';
-import { CheckCircle2, Lightbulb, Trash2, BookMarked } from 'lucide-react';
+import { CheckCircle2, Lightbulb, Trash2, BookMarked, Code, BookOpen } from 'lucide-react';
 import { Button } from './components/ui/button';
 import { toast } from './hooks/use-toast';
 import { Toaster } from './components/ui/toaster';
 
 function App() {
-  const [currentView, setCurrentView] = useState('levels'); // 'levels' ou 'quiz'
+  const [currentView, setCurrentView] = useState('levels'); // 'levels', 'quiz', 'yaml', 'yaml-library'
   const [currentLevel, setCurrentLevel] = useState(1);
   const [currentStageIndex, setCurrentStageIndex] = useState(0);
   const [droppedItems, setDroppedItems] = useState([]);
@@ -198,7 +200,102 @@ function App() {
     }
   };
 
-  // Si on est dans la section quiz, afficher QuizSection
+  // Si on est dans la section YAML
+  if (currentView === 'yaml') {
+    return (
+      <div className="flex flex-col h-screen bg-gray-50">
+        {/* Header */}
+        <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+              <span className="text-white text-xl font-bold">K</span>
+            </div>
+            <h1 className="text-2xl font-bold">
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Kube</span>
+              <span className="text-gray-800">Learn</span>
+            </h1>
+          </div>
+          <div className="flex items-center gap-4">
+            <Button
+              onClick={() => setCurrentView('yaml-library')}
+              variant="outline"
+              className="flex items-center gap-2 font-semibold border-green-500 text-green-700 hover:bg-green-50"
+            >
+              <BookOpen className="w-5 h-5" />
+              Bibliothèque YAML
+            </Button>
+            <Button
+              onClick={() => setCurrentView('levels')}
+              variant="outline"
+              className="font-semibold"
+            >
+              Retour aux niveaux
+            </Button>
+            <div className="bg-gradient-to-r from-orange-400 to-orange-500 text-white px-4 py-2 rounded-lg font-bold shadow-md">
+              Score : {score} pts
+            </div>
+          </div>
+        </header>
+
+        <div className="flex-1 overflow-hidden">
+          <YamlSection 
+            score={score}
+            onScoreUpdate={(points) => setScore(prev => prev + points)}
+          />
+        </div>
+
+        <Toaster />
+      </div>
+    );
+  }
+
+  // Si on est dans la bibliothèque YAML
+  if (currentView === 'yaml-library') {
+    return (
+      <div className="flex flex-col h-screen bg-gray-50">
+        {/* Header */}
+        <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+              <span className="text-white text-xl font-bold">K</span>
+            </div>
+            <h1 className="text-2xl font-bold">
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Kube</span>
+              <span className="text-gray-800">Learn</span>
+            </h1>
+          </div>
+          <div className="flex items-center gap-4">
+            <Button
+              onClick={() => setCurrentView('yaml')}
+              variant="outline"
+              className="flex items-center gap-2 font-semibold border-blue-500 text-blue-700 hover:bg-blue-50"
+            >
+              <Code className="w-5 h-5" />
+              Exercices YAML
+            </Button>
+            <Button
+              onClick={() => setCurrentView('levels')}
+              variant="outline"
+              className="font-semibold"
+            >
+              Retour aux niveaux
+            </Button>
+            <div className="bg-gradient-to-r from-orange-400 to-orange-500 text-white px-4 py-2 rounded-lg font-bold shadow-md">
+              Score : {score} pts
+            </div>
+          </div>
+        </header>
+
+        <div className="flex-1 overflow-hidden">
+          <YamlLibrary />
+        </div>
+
+        <Toaster />
+      </div>
+    );
+  }
+
+  // Si on est dans la section quiz
   if (currentView === 'quiz') {
     return (
       <div className="flex flex-col h-screen bg-gray-50">
@@ -253,6 +350,13 @@ function App() {
           </h1>
         </div>
         <div className="flex items-center gap-4">
+          <Button
+            onClick={() => setCurrentView('yaml')}
+            className="flex items-center gap-2 font-semibold bg-blue-600 hover:bg-blue-700"
+          >
+            <Code className="w-5 h-5" />
+            Section YAML
+          </Button>
           <Button
             onClick={() => setCurrentView('quiz')}
             className="flex items-center gap-2 font-semibold bg-purple-600 hover:bg-purple-700"
