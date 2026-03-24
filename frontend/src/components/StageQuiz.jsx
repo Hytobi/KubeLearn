@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { CheckCircle2, XCircle, BookOpen } from 'lucide-react';
 import { Button } from './ui/button';
 
-const StageQuiz = ({ quiz, levelColor, onContinue }) => {
+const StageQuiz = ({ quiz, levelColor, onContinue, onCorrectAnswer }) => {
   const [selectedChoice, setSelectedChoice] = useState(null);
   const [showResult, setShowResult] = useState(false);
+  const [pointsAwarded, setPointsAwarded] = useState(false);
 
   const handleChoiceSelect = (choiceId) => {
     if (!showResult) {
@@ -15,6 +16,13 @@ const StageQuiz = ({ quiz, levelColor, onContinue }) => {
   const handleSubmit = () => {
     if (selectedChoice) {
       setShowResult(true);
+      const isCorrect = quiz.choices.find(c => c.id === selectedChoice)?.correct;
+      
+      // Donner +100 points si correct et pas déjà donné
+      if (isCorrect && !pointsAwarded && onCorrectAnswer) {
+        onCorrectAnswer();
+        setPointsAwarded(true);
+      }
     }
   };
 

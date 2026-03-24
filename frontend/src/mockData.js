@@ -99,6 +99,7 @@ export const levels = [
     name: 'Niveau 1 — Bases',
     icon: '🌱',
     color: '#10B981',
+    allowedComponents: ['pod', 'node', 'cluster', 'namespace'],
     quiz: {
       question: "Quel est le rôle principal d'un Pod dans Kubernetes ?",
       choices: [
@@ -219,6 +220,7 @@ export const levels = [
     name: 'Niveau 2 — Objets',
     icon: '⚙️',
     color: '#F59E0B',
+    allowedComponents: ['pod', 'node', 'cluster', 'namespace', 'deployment', 'service', 'configmap', 'secret'],
     quiz: {
       question: "Quelle est la différence principale entre un Deployment et un Pod ?",
       choices: [
@@ -370,6 +372,7 @@ export const levels = [
     name: 'Niveau 3 — Production',
     icon: '🚀',
     color: '#8B5CF6',
+    allowedComponents: ['pod', 'node', 'cluster', 'namespace', 'deployment', 'service', 'configmap', 'secret', 'ingress'],
     quiz: {
       question: "Pourquoi utilise-t-on un Ingress plutôt qu'un Service de type LoadBalancer ?",
       choices: [

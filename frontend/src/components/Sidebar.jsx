@@ -3,7 +3,12 @@ import KubeComponent from './KubeComponent';
 import { kubernetesComponents } from '../mockData';
 import { Package } from 'lucide-react';
 
-const Sidebar = () => {
+const Sidebar = ({ currentLevel }) => {
+  // Filtrer les composants selon le niveau
+  const visibleComponents = kubernetesComponents.filter(component => 
+    currentLevel?.allowedComponents?.includes(component.id)
+  );
+
   return (
     <div className="w-64 bg-white border-r border-gray-200 p-4 overflow-y-auto">
       <div className="mb-4">
@@ -15,7 +20,7 @@ const Sidebar = () => {
       </div>
       
       <div className="space-y-3">
-        {kubernetesComponents.map((component) => (
+        {visibleComponents.map((component) => (
           <KubeComponent key={component.id} component={component} isInSidebar={true} />
         ))}
       </div>

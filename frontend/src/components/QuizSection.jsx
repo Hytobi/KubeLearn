@@ -3,13 +3,14 @@ import { getAllQuizzes } from '../mockData';
 import { CheckCircle2, XCircle, BookOpen, Award } from 'lucide-react';
 import { Button } from './ui/button';
 
-const QuizSection = () => {
+const QuizSection = ({ score, onScoreUpdate }) => {
   const allQuizzes = getAllQuizzes();
   const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
   const [selectedChoice, setSelectedChoice] = useState(null);
   const [showResult, setShowResult] = useState(false);
   const [answeredQuizzes, setAnsweredQuizzes] = useState(new Set());
   const [correctAnswers, setCorrectAnswers] = useState(0);
+  const [quizPoints, setQuizPoints] = useState(new Map()); // Suivre les points par quiz
 
   const currentQuiz = allQuizzes[currentQuizIndex];
   const progress = ((answeredQuizzes.size / allQuizzes.length) * 100).toFixed(0);
@@ -25,8 +26,13 @@ const QuizSection = () => {
       setShowResult(true);
       const isCorrect = currentQuiz.choices.find(c => c.id === selectedChoice)?.correct;
       
-      if (isCorrect && !answeredQuizzes.has(currentQuiz.id)) {
+      // Ajouter points si correct et pas déjà répondu correctement
+      if (isCorrect && !quizPoints.has(currentQuiz.id)) {
         setCorrectAnswers(prev => prev + 1);
+        if (onScoreUpdate) {
+          onScoreUpdate(100); // +100 points
+        }
+        setQuizPoints(prev => new Map(prev).set(currentQuiz.id, true));
       }
       
       setAnsweredQuizzes(prev => new Set([...prev, currentQuiz.id]));

@@ -146,6 +146,10 @@ function App() {
     setShowHint(false);
   };
 
+  const handleStageQuizCorrectAnswer = () => {
+    setScore(prev => prev + 100);
+  };
+
   const handleLevelQuizComplete = () => {
     setShowLevelQuiz(false);
     
@@ -224,7 +228,10 @@ function App() {
         </header>
 
         <div className="flex-1 overflow-hidden">
-          <QuizSection />
+          <QuizSection 
+            score={score}
+            onScoreUpdate={(points) => setScore(prev => prev + points)}
+          />
         </div>
 
         <Toaster />
@@ -275,7 +282,7 @@ function App() {
 
       {/* Main Content */}
       <div className="flex flex-1 overflow-hidden">
-        <Sidebar />
+        <Sidebar currentLevel={currentLevelData} />
 
         <div className="flex-1 overflow-y-auto p-6">
           {showStageQuiz ? (
@@ -283,6 +290,7 @@ function App() {
               quiz={currentStage.quiz}
               levelColor={currentLevelData.color}
               onContinue={handleStageQuizContinue}
+              onCorrectAnswer={handleStageQuizCorrectAnswer}
             />
           ) : showLevelQuiz ? (
             <LevelQuiz 
