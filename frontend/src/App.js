@@ -4,6 +4,7 @@ import Sidebar from './components/Sidebar';
 import DroppableZone from './components/DroppableZone';
 import ReferencePanel from './components/ReferencePanel';
 import LevelNav from './components/LevelNav';
+import LevelQuiz from './components/LevelQuiz';
 import { levels } from './mockData';
 import { CheckCircle2, Lightbulb, Trash2 } from 'lucide-react';
 import { Button } from './components/ui/button';
@@ -17,9 +18,11 @@ function App() {
   const [completedStages, setCompletedStages] = useState([]);
   const [score, setScore] = useState(0);
   const [showHint, setShowHint] = useState(false);
+  const [showQuiz, setShowQuiz] = useState(false);
 
   const currentLevelData = levels.find(l => l.id === currentLevel);
   const currentStage = currentLevelData?.stages[currentStageIndex];
+  const isLastStage = currentStageIndex === currentLevelData?.stages.length - 1;
 
   const generateUniqueId = () => {
     return `item-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -119,19 +122,8 @@ function App() {
           setDroppedItems([]);
           setShowHint(false);
         } else {
-          // Niveau terminé
-          if (currentLevel < levels.length) {
-            setCurrentLevel(prev => prev + 1);
-            setCurrentStageIndex(0);
-            setDroppedItems([]);
-            setShowHint(false);
-          } else {
-            toast({
-              title: "🎉 Félicitations !",
-              description: "Tu as terminé tous les niveaux !",
-              duration: 5000,
-            });
-          }
+          // Dernier stage du niveau - afficher le quiz
+          setShowQuiz(true);
         }
       }, 2000);
     } else {
@@ -139,6 +131,30 @@ function App() {
         title: "❌ Pas tout à fait...",
         description: validationMessages.join(' • '),
         variant: "destructive",
+        duration: 5000,
+      });
+    }
+  };
+
+  const handleQuizComplete = () => {
+    setShowQuiz(false);
+    
+    if (currentLevel < levels.length) {
+      // Passer au niveau suivant
+      setCurrentLevel(prev => prev + 1);
+      setCurrentStageIndex(0);
+      setDroppedItems([]);
+      setShowHint(false);
+      toast({
+        title: "🎉 Niveau terminé !",
+        description: `Passage au niveau ${currentLevel + 1}`,
+        duration: 3000,
+      });
+    } else {
+      // Tous les niveaux terminés
+      toast({
+        title: "🏆 Félicitations !",
+        description: "Tu as terminé tous les niveaux de KubeLearn !",
         duration: 5000,
       });
     }
@@ -181,8 +197,16 @@ function App() {
         <Sidebar />
 
         <div className="flex-1 overflow-y-auto p-6">
-          {/* Stage Info */}
-          <div className="bg-white rounded-xl p-6 mb-6 shadow-sm border border-gray-100">
+          {showQuiz ? (
+            <LevelQuiz 
+              quiz={currentLevelData.quiz}
+              levelColor={currentLevelData.color}
+              onComplete={handleQuizComplete}
+            />
+          ) : (
+            <>
+              {/* Stage Info */}
+              <div className="bg-white rounded-xl p-6 mb-6 shadow-sm border border-gray-100">
             <div className="flex items-center gap-3 mb-4">
               <span 
                 className="px-3 py-1 rounded-lg text-sm font-bold text-white"
@@ -266,6 +290,8 @@ function App() {
                 </div>
               </div>
             </div>
+          )}
+          </>
           )}
         </div>
 

@@ -99,6 +99,23 @@ export const levels = [
     name: 'Niveau 1 — Bases',
     icon: '🌱',
     color: '#10B981',
+    quiz: {
+      question: "Quel est le rôle principal d'un Pod dans Kubernetes ?",
+      choices: [
+        { id: 'a', text: "Gérer les permissions et la sécurité du cluster", correct: false },
+        { id: 'b', text: "Exécuter un ou plusieurs conteneurs partageant les mêmes ressources", correct: true },
+        { id: 'c', text: "Router le trafic réseau entre différents services", correct: false },
+        { id: 'd', text: "Stocker les données de configuration du cluster", correct: false }
+      ],
+      explanation: "Le Pod est la plus petite unité d'exécution dans Kubernetes. Il peut contenir un ou plusieurs conteneurs qui partagent le même réseau, le même stockage et les mêmes ressources.",
+      usefulCommands: [
+        "kubectl get pods",
+        "kubectl describe pod <nom-pod>",
+        "kubectl logs <nom-pod>",
+        "kubectl delete pod <nom-pod>",
+        "kubectl run mon-pod --image=nginx"
+      ]
+    },
     stages: [
       {
         id: '1-1',
@@ -158,6 +175,23 @@ export const levels = [
     name: 'Niveau 2 — Objets',
     icon: '⚙️',
     color: '#F59E0B',
+    quiz: {
+      question: "Quelle est la différence principale entre un Deployment et un Pod ?",
+      choices: [
+        { id: 'a', text: "Un Deployment ne peut contenir qu'un seul Pod", correct: false },
+        { id: 'b', text: "Un Deployment gère automatiquement les réplicas et les mises à jour des Pods", correct: true },
+        { id: 'c', text: "Un Pod est plus rapide qu'un Deployment", correct: false },
+        { id: 'd', text: "Un Deployment ne peut pas être supprimé", correct: false }
+      ],
+      explanation: "Un Deployment est un objet Kubernetes de niveau supérieur qui gère automatiquement le cycle de vie des Pods. Il assure qu'un nombre spécifié de réplicas est toujours en cours d'exécution et facilite les mises à jour progressives.",
+      usefulCommands: [
+        "kubectl create deployment nginx --image=nginx",
+        "kubectl get deployments",
+        "kubectl scale deployment nginx --replicas=3",
+        "kubectl rollout status deployment/nginx",
+        "kubectl set image deployment/nginx nginx=nginx:1.21"
+      ]
+    },
     stages: [
       {
         id: '2-1',
@@ -237,6 +271,23 @@ export const levels = [
     name: 'Niveau 3 — Production',
     icon: '🚀',
     color: '#8B5CF6',
+    quiz: {
+      question: "Pourquoi utilise-t-on un Ingress plutôt qu'un Service de type LoadBalancer ?",
+      choices: [
+        { id: 'a', text: "Un Ingress est plus rapide qu'un LoadBalancer", correct: false },
+        { id: 'b', text: "Un Ingress permet de gérer plusieurs services avec une seule IP et offre le routage HTTP/HTTPS", correct: true },
+        { id: 'c', text: "Un Ingress ne nécessite pas de configuration", correct: false },
+        { id: 'd', text: "Un LoadBalancer ne fonctionne pas avec Kubernetes", correct: false }
+      ],
+      explanation: "Un Ingress permet de gérer l'accès externe à plusieurs services avec une seule adresse IP, offrant des fonctionnalités avancées comme le routage basé sur les chemins, la terminaison SSL/TLS, et l'équilibrage de charge au niveau HTTP/HTTPS.",
+      usefulCommands: [
+        "kubectl get ingress",
+        "kubectl describe ingress <nom-ingress>",
+        "kubectl create ingress simple --rule='foo.com/bar=svc:8080'",
+        "kubectl get services",
+        "kubectl create secret tls mon-tls --cert=cert.pem --key=key.pem"
+      ]
+    },
     stages: [
       {
         id: '3-1',

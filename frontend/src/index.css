@@ -17,6 +17,22 @@ code {
         source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.5s ease-out;
+}
+
+
 @layer base {
     :root {
         --background: 0 0% 100%;
