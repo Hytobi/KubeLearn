@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KubeLearn Quiz Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+            background: #F9FAFB;
+            padding: 40px 20px;
+            margin: 0;
+        }
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .quiz-card {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 2px solid #E5E7EB;
+            margin-bottom: 24px;
+        }
+        .quiz-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .quiz-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        .quiz-title h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1F2937;
+            margin: 0;
+        }
+        .quiz-title p {
+            font-size: 14px;
+            color: #6B7280;
+            margin: 4px 0 0 0;
+        }
+        .question-box {
+            background: #EFF6FF;
+            border-left: 4px solid #3B82F6;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+        .question-box p {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1F2937;
+            margin: 0;
+        }
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .choice {
+            padding: 16px;
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+        }
+        .choice:hover {
+            border-color: #3B82F6;
+            background: #EFF6FF;
+        }
+        .choice.selected {
+            border-color: #3B82F6;
+            background: #EFF6FF;
+        }
+        .choice.correct {
+            border-color: #10B981;
+            background: #D1FAE5;
+        }
+        .choice.incorrect {
+            border-color: #EF4444;
+            background: #FEE2E2;
+        }
+        .choice-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .choice-label {
+            font-weight: bold;
+            font-size: 18px;
+            color: #4B5563;
+        }
+        .choice-text {
+            color: #1F2937;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: #10B981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 24px;
+        }
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .result-box {
+            background: #D1FAE5;
+            border: 2px solid #10B981;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 24px;
+        }
+        .result-box h3 {
+            color: #065F46;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 0 8px 0;
+        }
+        .result-box p {
+            color: #047857;
+            margin: 0;
+        }
+        .commands-box {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 2px solid #E5E7EB;
+        }
+        .commands-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .commands-header h3 {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1F2937;
+            margin: 0;
+        }
+        .commands-header svg {
+            color: #10B981;
+        }
+        .commands-content {
+            background: #1F2937;
+            border-radius: 8px;
+            padding: 16px;
+            font-family: monospace;
+            margin-top: 16px;
+        }
+        .command-line {
+            color: #10B981;
+            font-size: 14px;
+            margin: 8px 0;
+        }
+        .command-prompt {
+            color: #6B7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <!-- Quiz Card -->
+        <div class="quiz-card">
+            <div class="quiz-header">
+                <div class="quiz-icon">🎓</div>
+                <div class="quiz-title">
+                    <h2>Question de fin de niveau</h2>
+                    <p>Teste tes connaissances !</p>
+                </div>
+            </div>
+
+            <div class="question-box">
+                <p>Quel est le rôle principal d'un Pod dans Kubernetes ?</p>
+            </div>
+
+            <div class="choices">
+                <div class="choice">
+                    <div class="choice-content">
+                        <span class="choice-label">A.</span>
+                        <span class="choice-text">Gérer les permissions et la sécurité du cluster</span>
+                    </div>
+                </div>
+                <div class="choice correct">
+                    <div class="choice-content">
+                        <span class="choice-label">B.</span>
+                        <span class="choice-text">Exécuter un ou plusieurs conteneurs partageant les mêmes ressources ✓</span>
+                    </div>
+                </div>
+                <div class="choice">
+                    <div class="choice-content">
+                        <span class="choice-label">C.</span>
+                        <span class="choice-text">Router le trafic réseau entre différents services</span>
+                    </div>
+                </div>
+                <div class="choice">
+                    <div class="choice-content">
+                        <span class="choice-label">D.</span>
+                        <span class="choice-text">Stocker les données de configuration du cluster</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-box">
+                <h3>🎉 Bravo ! Bonne réponse !</h3>
+                <p>Le Pod est la plus petite unité d'exécution dans Kubernetes. Il peut contenir un ou plusieurs conteneurs qui partagent le même réseau, le même stockage et les mêmes ressources.</p>
+            </div>
+        </div>
+
+        <!-- Commands Box -->
+        <div class="commands-box">
+            <div class="commands-header">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                </svg>
+                <h3>Commandes utiles</h3>
+            </div>
+            <p style="color: #6B7280; margin-bottom: 16px;">Voici quelques commandes kubectl essentielles pour ce niveau :</p>
+            <div class="commands-content">
+                <div class="command-line"><span class="command-prompt">$</span> kubectl get pods</div>
+                <div class="command-line"><span class="command-prompt">$</span> kubectl describe pod &lt;nom-pod&gt;</div>
+                <div class="command-line"><span class="command-prompt">$</span> kubectl logs &lt;nom-pod&gt;</div>
+                <div class="command-line"><span class="command-prompt">$</span> kubectl delete pod &lt;nom-pod&gt;</div>
+                <div class="command-line"><span class="command-prompt">$</span> kubectl run mon-pod --image=nginx</div>
+            </div>
+            <button class="submit-btn">Continuer vers le niveau suivant</button>
+        </div>
+    </div>
+</body>
+</html>
