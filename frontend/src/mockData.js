@@ -127,7 +127,18 @@ export const levels = [
         requiredComponents: [
           { type: 'pod', count: 1, parentType: 'cluster' }
         ],
-        hint: "Glisse simplement un Pod depuis le panneau de gauche vers la zone de construction."
+        hint: "Glisse simplement un Pod depuis le panneau de gauche vers la zone de construction.",
+        quiz: {
+          question: "Un Pod peut-il contenir plusieurs conteneurs ?",
+          choices: [
+            { id: 'a', text: "Non, un Pod ne peut contenir qu'un seul conteneur", correct: false },
+            { id: 'b', text: "Oui, un Pod peut contenir un ou plusieurs conteneurs", correct: true },
+            { id: 'c', text: "Oui, mais seulement deux conteneurs maximum", correct: false },
+            { id: 'd', text: "Non, il faut créer plusieurs Pods", correct: false }
+          ],
+          explanation: "Un Pod peut contenir un ou plusieurs conteneurs qui partagent le même réseau, le même stockage et les mêmes ressources.",
+          commands: ["kubectl get pods", "kubectl describe pod <nom-pod>"]
+        }
       },
       {
         id: '1-2',
@@ -140,7 +151,18 @@ export const levels = [
           { type: 'node', count: 1, parentType: 'cluster' },
           { type: 'pod', count: 1, parentType: 'node' }
         ],
-        hint: "D'abord place un Node dans le cluster, puis glisse un Pod à l'intérieur du Node."
+        hint: "D'abord place un Node dans le cluster, puis glisse un Pod à l'intérieur du Node.",
+        quiz: {
+          question: "Quel est le rôle d'un Node dans Kubernetes ?",
+          choices: [
+            { id: 'a', text: "Héberger et exécuter les Pods", correct: true },
+            { id: 'b', text: "Stocker les configurations", correct: false },
+            { id: 'c', text: "Gérer les utilisateurs", correct: false },
+            { id: 'd', text: "Créer des backups automatiques", correct: false }
+          ],
+          explanation: "Un Node est une machine physique ou virtuelle qui héberge et exécute les Pods. C'est la ressource de calcul du cluster.",
+          commands: ["kubectl get nodes", "kubectl describe node <nom-node>"]
+        }
       },
       {
         id: '1-3',
@@ -153,7 +175,18 @@ export const levels = [
           { type: 'node', count: 1, parentType: 'cluster' },
           { type: 'pod', count: 3, parentType: 'node' }
         ],
-        hint: "Glisse plusieurs Pods dans le même Node pour les y héberger."
+        hint: "Glisse plusieurs Pods dans le même Node pour les y héberger.",
+        quiz: {
+          question: "Combien de Pods un Node peut-il héberger ?",
+          choices: [
+            { id: 'a', text: "Un seul Pod par Node", correct: false },
+            { id: 'b', text: "Maximum 10 Pods", correct: false },
+            { id: 'c', text: "Plusieurs Pods, selon les ressources disponibles", correct: true },
+            { id: 'd', text: "Exactement 5 Pods", correct: false }
+          ],
+          explanation: "Un Node peut héberger plusieurs Pods. Le nombre exact dépend des ressources disponibles (CPU, mémoire) sur le Node.",
+          commands: ["kubectl get pods -o wide", "kubectl top nodes"]
+        }
       },
       {
         id: '1-4',
@@ -166,7 +199,18 @@ export const levels = [
           { type: 'node', count: 2, parentType: 'cluster' },
           { type: 'pod', count: 4, parentType: 'node' }
         ],
-        hint: "Place 2 Nodes dans le cluster, puis mets 2 Pods dans chaque Node."
+        hint: "Place 2 Nodes dans le cluster, puis mets 2 Pods dans chaque Node.",
+        quiz: {
+          question: "Pourquoi utilise-t-on plusieurs Nodes dans un cluster ?",
+          choices: [
+            { id: 'a', text: "C'est obligatoire dans Kubernetes", correct: false },
+            { id: 'b', text: "Pour la haute disponibilité et répartition de charge", correct: true },
+            { id: 'c', text: "Pour économiser de l'argent", correct: false },
+            { id: 'd', text: "Pour accélérer les déploiements", correct: false }
+          ],
+          explanation: "Plusieurs Nodes assurent la haute disponibilité : si un Node tombe, les Pods peuvent continuer à fonctionner sur d'autres Nodes. Cela permet aussi de répartir la charge.",
+          commands: ["kubectl get nodes", "kubectl drain <node-name>"]
+        }
       }
     ]
   },
@@ -204,7 +248,18 @@ export const levels = [
           { type: 'namespace', count: 1, parentType: 'cluster' },
           { type: 'pod', count: 2, parentType: 'namespace' }
         ],
-        hint: "Place un Namespace dans le cluster, puis glisse des Pods à l'intérieur."
+        hint: "Place un Namespace dans le cluster, puis glisse des Pods à l'intérieur.",
+        quiz: {
+          question: "À quoi servent les Namespaces dans Kubernetes ?",
+          choices: [
+            { id: 'a', text: "À séparer et isoler logiquement les ressources", correct: true },
+            { id: 'b', text: "À accélérer les Pods", correct: false },
+            { id: 'c', text: "À créer des backups", correct: false },
+            { id: 'd', text: "À gérer les mots de passe", correct: false }
+          ],
+          explanation: "Les Namespaces permettent de partitionner un cluster en plusieurs espaces virtuels pour isoler les ressources entre équipes, projets ou environnements.",
+          commands: ["kubectl create namespace prod", "kubectl get namespaces"]
+        }
       },
       {
         id: '2-2',
@@ -217,7 +272,18 @@ export const levels = [
           { type: 'deployment', count: 1, parentType: 'any' },
           { type: 'pod', count: 3, parentType: 'deployment' }
         ],
-        hint: "Place un Deployment dans le cluster ou un namespace, puis ajoute 3 Pods à l'intérieur."
+        hint: "Place un Deployment dans le cluster ou un namespace, puis ajoute 3 Pods à l'intérieur.",
+        quiz: {
+          question: "Que se passe-t-il si un Pod d'un Deployment est supprimé ?",
+          choices: [
+            { id: 'a', text: "Le Deployment recrée automatiquement un nouveau Pod", correct: true },
+            { id: 'b', text: "Rien, le Pod est définitivement perdu", correct: false },
+            { id: 'c', text: "Le cluster s'arrête", correct: false },
+            { id: 'd', text: "Il faut recréer manuellement le Pod", correct: false }
+          ],
+          explanation: "Un Deployment surveille constamment ses Pods et en recrée automatiquement pour maintenir le nombre de réplicas souhaité.",
+          commands: ["kubectl get deployments", "kubectl scale deployment <name> --replicas=5"]
+        }
       },
       {
         id: '2-3',
@@ -231,7 +297,18 @@ export const levels = [
           { type: 'pod', count: 2, parentType: 'deployment' },
           { type: 'service', count: 1, parentType: 'any' }
         ],
-        hint: "Place un Deployment avec des Pods, puis ajoute un Service pour les exposer."
+        hint: "Place un Deployment avec des Pods, puis ajoute un Service pour les exposer.",
+        quiz: {
+          question: "Quel est le rôle principal d'un Service ?",
+          choices: [
+            { id: 'a', text: "Créer des Pods", correct: false },
+            { id: 'b', text: "Exposer les Pods sur le réseau avec une IP stable", correct: true },
+            { id: 'c', text: "Surveiller les logs", correct: false },
+            { id: 'd', text: "Gérer les Namespaces", correct: false }
+          ],
+          explanation: "Un Service fournit un point d'accès réseau stable (IP fixe) pour un ensemble de Pods, avec load balancing automatique.",
+          commands: ["kubectl expose deployment <name> --port=80", "kubectl get services"]
+        }
       },
       {
         id: '2-4',
@@ -246,7 +323,18 @@ export const levels = [
           { type: 'deployment', count: 1, parentType: 'namespace' },
           { type: 'pod', count: 2, parentType: 'deployment' }
         ],
-        hint: "Place un Namespace, ajoute un ConfigMap et un Deployment avec des Pods dedans."
+        hint: "Place un Namespace, ajoute un ConfigMap et un Deployment avec des Pods dedans.",
+        quiz: {
+          question: "Quelle est la différence entre ConfigMap et Secret ?",
+          choices: [
+            { id: 'a', text: "ConfigMap pour configuration non-sensible, Secret pour données sensibles", correct: true },
+            { id: 'b', text: "ConfigMap est plus rapide", correct: false },
+            { id: 'c', text: "Secret ne peut pas être modifié", correct: false },
+            { id: 'd', text: "Il n'y a aucune différence", correct: false }
+          ],
+          explanation: "ConfigMap stocke des données de configuration non-sensibles, tandis que Secret stocke des données sensibles (mots de passe, tokens) avec encodage base64.",
+          commands: ["kubectl create configmap <name> --from-literal=key=value", "kubectl get configmaps"]
+        }
       },
       {
         id: '2-5',
@@ -262,7 +350,18 @@ export const levels = [
           { type: 'deployment', count: 1, parentType: 'namespace' },
           { type: 'pod', count: 2, parentType: 'deployment' }
         ],
-        hint: "Organise tout dans un Namespace : Secret, ConfigMap, et Deployment avec Pods."
+        hint: "Organise tout dans un Namespace : Secret, ConfigMap, et Deployment avec Pods.",
+        quiz: {
+          question: "Comment sont encodées les données dans un Secret ?",
+          choices: [
+            { id: 'a', text: "En texte clair", correct: false },
+            { id: 'b', text: "En base64", correct: true },
+            { id: 'c', text: "Avec chiffrement AES-256", correct: false },
+            { id: 'd', text: "Avec un hash MD5", correct: false }
+          ],
+          explanation: "Les Secrets Kubernetes stockent les données encodées en base64 (pas chiffré par défaut). Pour un vrai chiffrement, il faut activer le chiffrement at-rest.",
+          commands: ["kubectl create secret generic <name> --from-literal=password=secret", "kubectl get secrets"]
+        }
       }
     ]
   },
@@ -302,7 +401,18 @@ export const levels = [
           { type: 'deployment', count: 1, parentType: 'any' },
           { type: 'pod', count: 2, parentType: 'deployment' }
         ],
-        hint: "Crée la chaîne complète : Ingress → Service → Deployment → Pods."
+        hint: "Crée la chaîne complète : Ingress → Service → Deployment → Pods.",
+        quiz: {
+          question: "Que fait un Ingress Controller ?",
+          choices: [
+            { id: 'a', text: "Implémente les règles définies dans l'Ingress", correct: true },
+            { id: 'b', text: "Crée automatiquement des Pods", correct: false },
+            { id: 'c', text: "Gère les Namespaces", correct: false },
+            { id: 'd', text: "Supprime les Services inutiles", correct: false }
+          ],
+          explanation: "Un Ingress Controller est un composant qui lit les ressources Ingress et configure un reverse proxy (nginx, traefik, etc.) pour implémenter les règles de routage.",
+          commands: ["kubectl get ingress", "kubectl describe ingress <name>"]
+        }
       },
       {
         id: '3-2',
@@ -320,7 +430,18 @@ export const levels = [
           { type: 'service', count: 1, parentType: 'namespace' },
           { type: 'ingress', count: 1, parentType: 'namespace' }
         ],
-        hint: "Organise tout dans un Namespace : config (Secret, ConfigMap), app (Deployment avec Pods), et exposition (Service, Ingress)."
+        hint: "Organise tout dans un Namespace : config (Secret, ConfigMap), app (Deployment avec Pods), et exposition (Service, Ingress).",
+        quiz: {
+          question: "Dans quel ordre les composants sont-ils généralement créés en production ?",
+          choices: [
+            { id: 'a', text: "Ingress → Service → Deployment → ConfigMap/Secret", correct: false },
+            { id: 'b', text: "ConfigMap/Secret → Deployment → Service → Ingress", correct: true },
+            { id: 'c', text: "Service → Ingress → Deployment → ConfigMap", correct: false },
+            { id: 'd', text: "L'ordre n'a pas d'importance", correct: false }
+          ],
+          explanation: "On crée d'abord la configuration (ConfigMap/Secret), puis l'application (Deployment), ensuite l'exposition interne (Service), et enfin l'accès externe (Ingress).",
+          commands: ["kubectl apply -f app-config.yaml", "kubectl rollout status deployment/<name>"]
+        }
       },
       {
         id: '3-3',
@@ -335,7 +456,18 @@ export const levels = [
           { type: 'pod', count: 4, parentType: 'deployment' },
           { type: 'service', count: 2, parentType: 'namespace' }
         ],
-        hint: "Crée 2 Namespaces identiques avec chacun un Deployment (2 Pods) et un Service."
+        hint: "Crée 2 Namespaces identiques avec chacun un Deployment (2 Pods) et un Service.",
+        quiz: {
+          question: "Pourquoi séparer dev/staging/prod dans différents Namespaces ?",
+          choices: [
+            { id: 'a', text: "Pour isoler les ressources et éviter les conflits", correct: true },
+            { id: 'b', text: "C'est obligatoire dans Kubernetes", correct: false },
+            { id: 'c', text: "Pour économiser de la mémoire", correct: false },
+            { id: 'd', text: "Pour accélérer les déploiements", correct: false }
+          ],
+          explanation: "Séparer les environnements dans différents Namespaces permet d'isoler les ressources, d'appliquer des quotas différents, et d'éviter les conflits de noms.",
+          commands: ["kubectl config set-context --current --namespace=prod", "kubectl get all -n staging"]
+        }
       },
       {
         id: '3-4',
@@ -352,8 +484,41 @@ export const levels = [
           { type: 'pod', count: 6, parentType: 'deployment' },
           { type: 'service', count: 2, parentType: 'namespace' }
         ],
-        hint: "Infrastructure : 3 Nodes. Logique : 2 Namespaces avec chacun Secret, Deployment (3 Pods), et Service."
+        hint: "Infrastructure : 3 Nodes. Logique : 2 Namespaces avec chacun Secret, Deployment (3 Pods), et Service.",
+        quiz: {
+          question: "Qu'est-ce que la haute disponibilité (HA) dans Kubernetes ?",
+          choices: [
+            { id: 'a', text: "Avoir des backups réguliers", correct: false },
+            { id: 'b', text: "Répliquer les composants sur plusieurs Nodes pour éviter les pannes", correct: true },
+            { id: 'c', text: "Utiliser des Pods plus puissants", correct: false },
+            { id: 'd', text: "Activer le mode debug", correct: false }
+          ],
+          explanation: "La haute disponibilité consiste à répliquer les composants critiques sur plusieurs Nodes pour qu'en cas de panne d'un Node, l'application continue de fonctionner.",
+          commands: ["kubectl get pods -o wide", "kubectl cordon <node-name>", "kubectl drain <node-name>"]
+        }
       }
     ]
   }
 ];
+
+// Fonction pour obtenir toutes les questions de quiz
+export const getAllQuizzes = () => {
+  const allQuizzes = [];
+  
+  levels.forEach(level => {
+    level.stages.forEach(stage => {
+      if (stage.quiz) {
+        allQuizzes.push({
+          id: stage.id,
+          levelId: level.id,
+          levelName: level.name,
+          levelColor: level.color,
+          stageTitle: stage.title,
+          ...stage.quiz
+        });
+      }
+    });
+  });
+  
+  return allQuizzes;
+};

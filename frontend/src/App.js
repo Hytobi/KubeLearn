@@ -5,20 +5,24 @@ import DroppableZone from './components/DroppableZone';
 import ReferencePanel from './components/ReferencePanel';
 import LevelNav from './components/LevelNav';
 import LevelQuiz from './components/LevelQuiz';
+import StageQuiz from './components/StageQuiz';
+import QuizSection from './components/QuizSection';
 import { levels } from './mockData';
-import { CheckCircle2, Lightbulb, Trash2 } from 'lucide-react';
+import { CheckCircle2, Lightbulb, Trash2, BookMarked } from 'lucide-react';
 import { Button } from './components/ui/button';
 import { toast } from './hooks/use-toast';
 import { Toaster } from './components/ui/toaster';
 
 function App() {
+  const [currentView, setCurrentView] = useState('levels'); // 'levels' ou 'quiz'
   const [currentLevel, setCurrentLevel] = useState(1);
   const [currentStageIndex, setCurrentStageIndex] = useState(0);
   const [droppedItems, setDroppedItems] = useState([]);
   const [completedStages, setCompletedStages] = useState([]);
   const [score, setScore] = useState(0);
   const [showHint, setShowHint] = useState(false);
-  const [showQuiz, setShowQuiz] = useState(false);
+  const [showStageQuiz, setShowStageQuiz] = useState(false);
+  const [showLevelQuiz, setShowLevelQuiz] = useState(false);
 
   const currentLevelData = levels.find(l => l.id === currentLevel);
   const currentStage = currentLevelData?.stages[currentStageIndex];
@@ -118,12 +122,11 @@ function App() {
 
       setTimeout(() => {
         if (currentStageIndex < currentLevelData.stages.length - 1) {
-          setCurrentStageIndex(prev => prev + 1);
-          setDroppedItems([]);
-          setShowHint(false);
+          // Étape suivante - afficher quiz de l'étape
+          setShowStageQuiz(true);
         } else {
-          // Dernier stage du niveau - afficher le quiz
-          setShowQuiz(true);
+          // Dernier stage du niveau - afficher quiz du niveau
+          setShowLevelQuiz(true);
         }
       }, 2000);
     } else {
@@ -131,6 +134,37 @@ function App() {
         title: "❌ Pas tout à fait...",
         description: validationMessages.join(' • '),
         variant: "destructive",
+        duration: 5000,
+      });
+    }
+  };
+
+  const handleStageQuizContinue = () => {
+    setShowStageQuiz(false);
+    setCurrentStageIndex(prev => prev + 1);
+    setDroppedItems([]);
+    setShowHint(false);
+  };
+
+  const handleLevelQuizComplete = () => {
+    setShowLevelQuiz(false);
+    
+    if (currentLevel < levels.length) {
+      // Passer au niveau suivant
+      setCurrentLevel(prev => prev + 1);
+      setCurrentStageIndex(0);
+      setDroppedItems([]);
+      setShowHint(false);
+      toast({
+        title: "🎉 Niveau terminé !",
+        description: `Passage au niveau ${currentLevel + 1}`,
+        duration: 3000,
+      });
+    } else {
+      // Tous les niveaux terminés
+      toast({
+        title: "🏆 Félicitations !",
+        description: "Tu as terminé tous les niveaux de KubeLearn !",
         duration: 5000,
       });
     }
@@ -160,6 +194,44 @@ function App() {
     }
   };
 
+  // Si on est dans la section quiz, afficher QuizSection
+  if (currentView === 'quiz') {
+    return (
+      <div className="flex flex-col h-screen bg-gray-50">
+        {/* Header */}
+        <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+              <span className="text-white text-xl font-bold">K</span>
+            </div>
+            <h1 className="text-2xl font-bold">
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Kube</span>
+              <span className="text-gray-800">Learn</span>
+            </h1>
+          </div>
+          <div className="flex items-center gap-4">
+            <Button
+              onClick={() => setCurrentView('levels')}
+              variant="outline"
+              className="font-semibold"
+            >
+              Retour aux niveaux
+            </Button>
+            <div className="bg-gradient-to-r from-orange-400 to-orange-500 text-white px-4 py-2 rounded-lg font-bold shadow-md">
+              Score : {score} pts
+            </div>
+          </div>
+        </header>
+
+        <div className="flex-1 overflow-hidden">
+          <QuizSection />
+        </div>
+
+        <Toaster />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col h-screen bg-gray-50">
       {/* Header */}
@@ -173,8 +245,17 @@ function App() {
             <span className="text-gray-800">Learn</span>
           </h1>
         </div>
-        <div className="bg-gradient-to-r from-orange-400 to-orange-500 text-white px-4 py-2 rounded-lg font-bold shadow-md">
-          Score : {score} pts
+        <div className="flex items-center gap-4">
+          <Button
+            onClick={() => setCurrentView('quiz')}
+            className="flex items-center gap-2 font-semibold bg-purple-600 hover:bg-purple-700"
+          >
+            <BookMarked className="w-5 h-5" />
+            Section QUIZ
+          </Button>
+          <div className="bg-gradient-to-r from-orange-400 to-orange-500 text-white px-4 py-2 rounded-lg font-bold shadow-md">
+            Score : {score} pts
+          </div>
         </div>
       </header>
 
@@ -197,11 +278,17 @@ function App() {
         <Sidebar />
 
         <div className="flex-1 overflow-y-auto p-6">
-          {showQuiz ? (
+          {showStageQuiz ? (
+            <StageQuiz 
+              quiz={currentStage.quiz}
+              levelColor={currentLevelData.color}
+              onContinue={handleStageQuizContinue}
+            />
+          ) : showLevelQuiz ? (
             <LevelQuiz 
               quiz={currentLevelData.quiz}
               levelColor={currentLevelData.color}
-              onComplete={handleQuizComplete}
+              onComplete={handleLevelQuizComplete}
             />
           ) : (
             <>
